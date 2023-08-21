@@ -1,5 +1,8 @@
 import math
 import random
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 """ Converts between hex, rgb, lch, and lab color formats
     Conversions and standard functions by CoPilot AI
@@ -73,10 +76,6 @@ def rgb2xyz_float(rgb: tuple) -> tuple:
     return x, y, z
 
 def lab2xyz(lab: tuple) -> tuple:
-    """Converts an LAB tuple to an XYZ tuple."""
-    return tuple(int(round(c * 255)) for c in lab2xyz_float(lab))
-
-def lab2xyz_float(lab: tuple) -> tuple:
     """Converts an LAB tuple to an XYZ tuple of floats."""
     l, a, b = lab
     y = (l + 16) / 116
@@ -85,13 +84,10 @@ def lab2xyz_float(lab: tuple) -> tuple:
     x = 0.95047 * math.pow(x, 3) if math.pow(x, 3) > 0.008856 else (x - 16/116) / 7.787
     y = 0.95047 * math.pow(y, 3) if math.pow(y, 3) > 0.008856 else (y - 16/116) / 7.787
     z = 0.95047 * math.pow(z, 3) if math.pow(z, 3) > 0.008856 else (z - 16/116) / 7.787
+    logging.debug(f"lab2xyz_float: x: {x}, y: {y}, z: {z}")
     return x, y, z
 
 def xyz2lab(xyz: tuple) -> tuple:
-    """Converts an XYZ tuple to an LAB tuple."""
-    return tuple(int(round(c * 255)) for c in xyz2lab_float(xyz))
-
-def xyz2lab_float(xyz: tuple) -> tuple:
     """Converts an XYZ tuple to an LAB tuple of floats."""
     x, y, z = xyz
     x /= 0.95047
@@ -131,7 +127,7 @@ class Color:
         self.xyz = lab2xyz(self.lab)
         self.rgb = xyz2rgb(self.xyz)
         self.hex = rgb2hex(self.rgb)
-        self.saturation = self.chroma / 100
+        logging.debug(f"Color created: hex: {self.hex}, rgb: {self.rgb}, lch: {self.lch}, lab: {self.lab}, xyz: {self.xyz}")
 
     def relative_luminance(self) -> float:
         """ Returns the relative luminance of the color."""
@@ -172,9 +168,9 @@ class ColorScheme:
         self.scheme:list[Color] = [base_color]
         self.darkmode:bool = darkmode
     
-    def return_scheme(self) -> list[Color]:
+    def return_scheme(self) -> list[str]:
         """Returns the color scheme."""
-        return self.scheme
+        return [color.hex for color in self.scheme]
 
     def make_scheme(self, amount: int)-> None:
         """Generates a color scheme based on the base color."""
@@ -191,8 +187,6 @@ class ColorScheme:
         self.manage_saturation()
         self.manage_lightness()
         self.mixup_lightness()
-
-
 
     def add_neighboring_color(self, color: Color)-> Color:
         """ Adds a color to the scheme that is close to the base color."""

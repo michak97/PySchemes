@@ -2,7 +2,11 @@ import cv2 as cv
 import numpy as np
 
 from pathlib import Path
-from schemeTool import ColorScheme, Color
+from schemeTool import ColorScheme, Color, random_color
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 class DrawScheme():
     """
@@ -43,7 +47,8 @@ class DrawScheme():
 
 if __name__ == "__main__":
     # Create Color Scheme
-    cl = ColorScheme(Color(0, 0, 0), True)
+    color = random_color()
+    cl = ColorScheme(color, True)
     cl.make_scheme(5)
     # Create Draw Scheme
     ds = DrawScheme(cl, (500, 500), Path("test.png"))
