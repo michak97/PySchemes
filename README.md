@@ -1,6 +1,6 @@
 # PYSCHEMES
 
-** PySchemes is a package for generating color schemes. It includes functions for color conversion between HEX, RCB, LCH, XYZ and LAB.
+**PySchemes** is a package for generating color schemes. It includes functions for color conversion between HEX, RCB, LCH, XYZ and LAB.
 
 ## How to install this package:
 
